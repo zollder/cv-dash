@@ -1,0 +1,7 @@
+<div class="card-header">
+    Doughnut Chart
+</div>
+<div class="card-body">
+    <canvas baseChart height="180px" [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+    </canvas>
+</div>

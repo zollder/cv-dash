@@ -8,9 +8,14 @@ import { DashboardComponent } from './dashboard.component';
 import {
     TimelineComponent,
     NotificationComponent,
-    ChatComponent
+    ChatComponent,
+    BarChartComponent,
+    DoughnutChartComponent,
+    LineChartComponent,
+    PieChartComponent
 } from './components';
 import { StatModule } from '../../shared';
+import {ChartsModule as Ng2Charts} from 'ng2-charts';
 
 @NgModule({
     imports: [
@@ -18,13 +23,18 @@ import { StatModule } from '../../shared';
         NgbCarouselModule.forRoot(),
         NgbAlertModule.forRoot(),
         DashboardRoutingModule,
-        StatModule
+        StatModule,
+        Ng2Charts
     ],
     declarations: [
         DashboardComponent,
         TimelineComponent,
         NotificationComponent,
-        ChatComponent
+        ChatComponent,
+        BarChartComponent,
+        DoughnutChartComponent,
+        LineChartComponent,
+        PieChartComponent
     ]
 })
 export class DashboardModule {}

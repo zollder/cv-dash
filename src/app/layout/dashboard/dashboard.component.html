@@ -1,6 +1,6 @@
 <div [@routerTransition]>
     <h2 class="text-muted">Dashboard <small>Statistics Overview</small></h2>
-    <hr>
+<!--    <hr>
     <div class="row">
         <div class="col-xl-3 col-lg-6">
             <app-stat [bgClass]="'primary'" [icon]="'fa-comments'" [count]="26" [label]="'New Comments!'" ></app-stat>
@@ -14,13 +14,58 @@
         <div class="col-xl-3 col-lg-6">
             <app-stat [bgClass]="'danger'" [icon]="'fa-support'" [count]="13" [label]="'New Tickets!'"></app-stat>
         </div>
-    </div>
+    </div>-->
     <hr />
     <!-- <ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}</ngb-alert> -->
-    <hr />
+    <!--<hr />-->
 
     <div class="row">
 
+        <div class="col-lg-6">
+            <div class="card mb-3">
+                <app-bar-chart></app-bar-chart>
+            </div>
+
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-3">
+                <app-doughnut-chart></app-doughnut-chart>
+            </div>
+        </div>
+        <!--         <div class="col-lg-8">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <i class="fa fa-clock-o fa-fw"></i> Responsive Timeline
+                        </div>
+                        <app-timeline></app-timeline>
+                    </div>
+                </div> -->
+        <!-- /.col-lg-8 -->
+        <!--         <div class="col-lg-4">
+                    <div class="card card-default mb-3">
+                        <div class="card-header">
+                            <i class="fa fa-bell fa-fw"></i> Notifications card
+                        </div>
+                        <app-notification></app-notification>
+                    </div>
+                    <app-chat></app-chat>
+                </div> -->
+        <!-- /.col-lg-4 -->
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-3">
+                <app-line-chart></app-line-chart>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-3">
+                <app-pie-chart></app-pie-chart>
+            </div>
+        </div>
+    </div>
+    <hr/>
+<!--    <div class="row">
         <div class="col-lg-8">
             <div class="card card-default">
                 <div class="card-header">
@@ -31,24 +76,5 @@
                 </div>
             </div>
         </div>
-<!--         <div class="col-lg-8">
-            <div class="card card-default">
-                <div class="card-header">
-                    <i class="fa fa-clock-o fa-fw"></i> Responsive Timeline
-                </div>
-                <app-timeline></app-timeline>
-            </div>
-        </div> -->
-        <!-- /.col-lg-8 -->
-<!--         <div class="col-lg-4">
-            <div class="card card-default mb-3">
-                <div class="card-header">
-                    <i class="fa fa-bell fa-fw"></i> Notifications card
-                </div>
-                <app-notification></app-notification>
-            </div>
-            <app-chat></app-chat>
-        </div> -->
-        <!-- /.col-lg-4 -->
-    </div>
+    </div>-->
 </div>
