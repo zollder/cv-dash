@@ -1,7 +1,5 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
-
-import { Chart } from 'chart.js';
 
 @Component({
     selector: 'app-dashboard',
@@ -14,7 +12,6 @@ export class DashboardComponent implements OnInit {
     public sliders: Array<any> = [];*/
 
     // chart info holder
-    chart = [];
 
     constructor() {
 
@@ -58,44 +55,7 @@ export class DashboardComponent implements OnInit {
         );*/
     }
 
-    ngOnInit() {
-        let canvas = <HTMLCanvasElement> document.getElementById('canvas');
-        let ctx = canvas.getContext('2d');
-        this.chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                datasets: [
-                    {
-                        backgroundColor: '#7E57C2',
-                        borderColor: '#7E57C2',
-                        data: [-76.97, 46.91, 32.31, -7.19, -9.85, -76.91, -50.36, 42.66],
-                        label: 'Dataset',
-                        fill: 'false'
-                    }
-                ]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                elements: {
-                    line: {
-                        tension: 0.000001
-                    }
-                },
-                plugins: {
-                    filler: {
-                        propagate: false
-                    }
-                },
-                title: {
-                    display: true,
-                    text: 'TEST GRAPH'
-                }
-            }
-        });
-    }
+    ngOnInit() {}
 /*    public closeAlert(alert: any) {
         const index: number = this.alerts.indexOf(alert);
         this.alerts.splice(index, 1);
