@@ -1,0 +1,17 @@
+<div class="card-body">
+    <label>Incoming Workload</label>
+    <hr/>
+
+    <canvas baseChart
+            [datasets]="mixedChartData"
+            [labels]="mixedChartLabels"
+            [options]="mixedChartOptions"
+            [legend]="mixedChartLegend"
+            [chartType]="mixedChartType"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)">
+    </canvas>
+</div>
+<div class="card-footer">
+    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
+</div>

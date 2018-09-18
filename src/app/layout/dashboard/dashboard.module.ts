@@ -12,10 +12,12 @@ import {
     BarChartComponent,
     DoughnutChartComponent,
     LineChartComponent,
-    PieChartComponent
+    PieChartComponent,
+    MixedChartComponent
 } from './components';
 import { StatModule } from '../../shared';
-import {ChartsModule as Ng2Charts} from 'ng2-charts';
+import { ChartsModule as Ng2Charts } from 'ng2-charts';
+import { NgxChartsModule} from '@swimlane/ngx-charts';
 
 @NgModule({
     imports: [
@@ -24,7 +26,8 @@ import {ChartsModule as Ng2Charts} from 'ng2-charts';
         NgbAlertModule.forRoot(),
         DashboardRoutingModule,
         StatModule,
-        Ng2Charts
+        Ng2Charts,
+        NgxChartsModule
     ],
     declarations: [
         DashboardComponent,
@@ -34,7 +37,8 @@ import {ChartsModule as Ng2Charts} from 'ng2-charts';
         BarChartComponent,
         DoughnutChartComponent,
         LineChartComponent,
-        PieChartComponent
+        PieChartComponent,
+        MixedChartComponent
     ]
 })
 export class DashboardModule {}
