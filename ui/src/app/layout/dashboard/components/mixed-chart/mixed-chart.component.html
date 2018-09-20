@@ -4,7 +4,6 @@
 
     <canvas baseChart
             [datasets]="mixedChartData"
-            [labels]="mixedChartLabels"
             [options]="mixedChartOptions"
             [legend]="mixedChartLegend"
             [chartType]="mixedChartType"
@@ -15,3 +14,13 @@
 <div class="card-footer">
     <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
 </div>
+
+<!--
+[datasets]="mixedChartData"
+[labels]="mixedChartLabels"
+[options]="mixedChartOptions"
+[legend]="mixedChartLegend"
+[chartType]="mixedChartType"
+(chartHover)="chartHovered($event)"
+(chartClick)="chartClicked($event)"
+-->

@@ -9,36 +9,70 @@ export class MixedChartComponent implements OnInit {
     // bar chart
     public mixedChartOptions: any = {
         scaleShowVerticalLines: false,
-        responsive: true
+        responsive: true,
+        // elements: {
+        //     line: {
+        //         tension: 0
+        //     }
+        // },
+        scales: {
+            xAxes: [{
+                type: 'time',
+                // distribution: 'linear', // explore
+                time: {
+                    unit: 'hour',
+                    // unitStepSize: 1,
+                    displayFormats: { hour: 'HH:mm'}
+                },
+                // ticks: {
+                //     source: 'data'
+                // },
+                // bounds: 'data' // data is fully visible, labels outside removed
+            }]
+        }
     };
-    public mixedChartLabels: string[] = [
-        '00',
-        '02',
-        '04',
-        '06',
-        '08',
-        '10',
-        '12',
-        '14',
-        '16',
-        '18',
-        '20',
-        '22',
-        '24'
-    ];
+
     // default chart type has to be 'bar'
-    public mixedChartType: string = 'bar';
-    public mixedChartLegend: boolean = true;
+    public mixedChartType = 'bar';
+    public mixedChartLegend = true;
 
     public mixedChartData: any[] = [{
-        data: [65, 59, 80, 81, 56, 55, 40, 15, 80, 90],
         label: 'Line',
         type: 'line',
-        fill: false
+        fill: false,
+        lineTension: 0,
+        data: [
+            { x: new Date('2018-09-11T12:00:00-0400'), y: 2 },
+            { x: new Date('2018-09-11T11:00:00-0400'), y: 34 },
+            { x: new Date('2018-09-11T10:00:00-0400'), y: 90 },
+            { x: new Date('2018-09-11T09:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T08:00:00-0400'), y: 15 },
+            { x: new Date('2018-09-11T07:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T06:00:00-0400'), y: 55 },
+            { x: new Date('2018-09-11T05:00:00-0400'), y: 56 },
+            { x: new Date('2018-09-11T04:00:00-0400'), y: 81 },
+            { x: new Date('2018-09-11T03:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T02:00:00-0400'), y: 59 },
+            { x: new Date('2018-09-11T01:00:00-0400'), y: 65 }
+        ]
     }, {
         label: 'Bar',
         type: 'bar',
-        data: [28, 48, 40, 19, 86, 27, 90, 40, 25, 82]
+        lineTension: 0.25,
+        data: [
+            { x: new Date('2018-09-11T12:00:00-0400'), y: 59 },
+            { x: new Date('2018-09-11T11:00:00-0400'), y: 85 },
+            { x: new Date('2018-09-11T10:00:00-0400'), y: 82 },
+            { x: new Date('2018-09-11T09:00:00-0400'), y: 25 },
+            { x: new Date('2018-09-11T08:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T07:00:00-0400'), y: 90 },
+            { x: new Date('2018-09-11T06:00:00-0400'), y: 27 },
+            { x: new Date('2018-09-11T05:00:00-0400'), y: 86 },
+            { x: new Date('2018-09-11T04:00:00-0400'), y: 19 },
+            { x: new Date('2018-09-11T03:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T02:00:00-0400'), y: 48 },
+            { x: new Date('2018-09-11T01:00:00-0400'), y: 28 }
+        ]
     }];
 
     // events
