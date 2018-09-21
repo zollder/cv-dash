@@ -23,9 +23,33 @@ export class BarChartComponent implements OnInit {
     public barChartType: string = 'bar';
     public barChartLegend: boolean = true;
 
+    public barChartColors: Array<any> = [
+        {
+            // grey
+            backgroundColor: 'black',
+            borderColor: 'green'
+        },
+        {
+            // dark grey
+            backgroundColor: 'rgba(77,83,96,0.2)',
+            borderColor: 'rgba(77,83,96,1)'
+        },
+        {
+            // grey
+            backgroundColor: 'rgba(148,159,177,0.2)',
+            borderColor: 'rgba(148,159,177,1)'
+        }
+    ];
+
     public barChartData: any[] = [
-        { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-        { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
+        {
+            data: [65, 59, 80, 81, 56, 55, 40],
+            label: 'Series A'
+        },
+        {
+            data: [28, 48, 40, 19, 86, 27, 90],
+            label: 'Series B'
+        }
     ];
 
     // events

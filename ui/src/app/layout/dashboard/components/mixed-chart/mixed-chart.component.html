@@ -1,10 +1,12 @@
 <div class="card-body">
-    <label>Incoming Workload</label>
+    <h5 class="card-title">Incoming Workload</h5>
+    <!--<label>Incoming Workload</label>-->
     <hr/>
 
     <canvas baseChart
             [datasets]="mixedChartData"
             [options]="mixedChartOptions"
+            [colors]="mixedChartColors"
             [legend]="mixedChartLegend"
             [chartType]="mixedChartType"
             (chartHover)="chartHovered($event)"

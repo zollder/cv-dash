@@ -10,6 +10,12 @@ export class MixedChartComponent implements OnInit {
     public mixedChartOptions: any = {
         scaleShowVerticalLines: false,
         responsive: true,
+        legend: {
+            position: 'bottom'
+        },
+        layout: {
+            backgroundColor: 'rgba(42,45,59,1)'
+        },
         // elements: {
         //     line: {
         //         tension: 0
@@ -24,10 +30,19 @@ export class MixedChartComponent implements OnInit {
                     // unitStepSize: 1,
                     displayFormats: { hour: 'HH:mm'}
                 },
+                gridLines: {
+                    display: false
+                }
                 // ticks: {
                 //     source: 'data'
                 // },
                 // bounds: 'data' // data is fully visible, labels outside removed
+            }],
+            yAxes: [{
+                gridLines: {
+                    display: true,
+                    color: 'rgba(181,182,187,0.2)'
+                }
             }]
         }
     };
@@ -36,42 +51,83 @@ export class MixedChartComponent implements OnInit {
     public mixedChartType = 'bar';
     public mixedChartLegend = true;
 
+    public mixedChartColors: Array<any> = [
+        {
+            // bar: light blue
+            backgroundColor: 'rgba(26,177,191,0.7)',
+            borderColor: 'rgba(26,177,191,1)'
+        },
+        {
+            // line: grey
+            borderColor: 'rgba(105,108,117,1)',
+            pointBackgroundColor: 'rgba(42,45,59,0.2)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(42,45,59,0.5)'
+        }
+    ];
+
     public mixedChartData: any[] = [{
+        label: 'Bar',
+        type: 'bar',
+        // lineTension: 0,
+        data: [
+            { x: new Date('2018-09-11T01:00:00-0400'), y: 65 },
+            { x: new Date('2018-09-11T02:00:00-0400'), y: 59 },
+            { x: new Date('2018-09-11T03:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T04:00:00-0400'), y: 81 },
+            { x: new Date('2018-09-11T05:00:00-0400'), y: 56 },
+            { x: new Date('2018-09-11T06:00:00-0400'), y: 55 },
+            { x: new Date('2018-09-11T07:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T08:00:00-0400'), y: 15 },
+            { x: new Date('2018-09-11T09:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T10:00:00-0400'), y: 90 },
+            { x: new Date('2018-09-11T11:00:00-0400'), y: 34 },
+            { x: new Date('2018-09-11T12:00:00-0400'), y: 2 },
+            { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T14:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T15:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T16:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T17:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T18:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T19:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 },
+
+        ]
+    }, {
         label: 'Line',
         type: 'line',
         fill: false,
         lineTension: 0,
         data: [
-            { x: new Date('2018-09-11T12:00:00-0400'), y: 2 },
-            { x: new Date('2018-09-11T11:00:00-0400'), y: 34 },
-            { x: new Date('2018-09-11T10:00:00-0400'), y: 90 },
-            { x: new Date('2018-09-11T09:00:00-0400'), y: 80 },
-            { x: new Date('2018-09-11T08:00:00-0400'), y: 15 },
-            { x: new Date('2018-09-11T07:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T06:00:00-0400'), y: 55 },
-            { x: new Date('2018-09-11T05:00:00-0400'), y: 56 },
-            { x: new Date('2018-09-11T04:00:00-0400'), y: 81 },
-            { x: new Date('2018-09-11T03:00:00-0400'), y: 80 },
-            { x: new Date('2018-09-11T02:00:00-0400'), y: 59 },
-            { x: new Date('2018-09-11T01:00:00-0400'), y: 65 }
-        ]
-    }, {
-        label: 'Bar',
-        type: 'bar',
-        lineTension: 0.25,
-        data: [
-            { x: new Date('2018-09-11T12:00:00-0400'), y: 59 },
-            { x: new Date('2018-09-11T11:00:00-0400'), y: 85 },
-            { x: new Date('2018-09-11T10:00:00-0400'), y: 82 },
-            { x: new Date('2018-09-11T09:00:00-0400'), y: 25 },
-            { x: new Date('2018-09-11T08:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T07:00:00-0400'), y: 90 },
-            { x: new Date('2018-09-11T06:00:00-0400'), y: 27 },
-            { x: new Date('2018-09-11T05:00:00-0400'), y: 86 },
-            { x: new Date('2018-09-11T04:00:00-0400'), y: 19 },
-            { x: new Date('2018-09-11T03:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T01:00:00-0400'), y: 28 },
             { x: new Date('2018-09-11T02:00:00-0400'), y: 48 },
-            { x: new Date('2018-09-11T01:00:00-0400'), y: 28 }
+            { x: new Date('2018-09-11T03:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T04:00:00-0400'), y: 19 },
+            { x: new Date('2018-09-11T05:00:00-0400'), y: 86 },
+            { x: new Date('2018-09-11T06:00:00-0400'), y: 27 },
+            { x: new Date('2018-09-11T07:00:00-0400'), y: 90 },
+            { x: new Date('2018-09-11T08:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T09:00:00-0400'), y: 25 },
+            { x: new Date('2018-09-11T10:00:00-0400'), y: 82 },
+            { x: new Date('2018-09-11T11:00:00-0400'), y: 85 },
+            { x: new Date('2018-09-11T12:00:00-0400'), y: 59 },
+            { x: new Date('2018-09-11T13:00:00-0400'), y: 65 },
+            { x: new Date('2018-09-11T14:00:00-0400'), y: 49 },
+            { x: new Date('2018-09-11T15:00:00-0400'), y: 35 },
+            { x: new Date('2018-09-11T16:00:00-0400'), y: 20 },
+            { x: new Date('2018-09-11T17:00:00-0400'), y: 10 },
+            { x: new Date('2018-09-11T18:00:00-0400'), y: 8 },
+            { x: new Date('2018-09-11T19:00:00-0400'), y: 2 },
+            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 },
         ]
     }];
 
