@@ -14,14 +14,17 @@ export class MixedChartComponent implements OnInit {
             position: 'bottom'
         },
         layout: {
-            backgroundColor: 'rgba(42,45,59,1)'
+            // padding: {
+            //     left: 50,
+            //     right: 0,
+            //     top: 0,
+            //     bottom: 0
+            // }
+            // backgroundColor: 'rgba(42,45,59,1)'
         },
-        // elements: {
-        //     line: {
-        //         tension: 0
-        //     }
-        // },
         scales: {
+            barBeginAtOrigin: true,
+            scaleBeginAtZero: true,
             xAxes: [{
                 type: 'time',
                 // distribution: 'linear', // explore
@@ -32,16 +35,18 @@ export class MixedChartComponent implements OnInit {
                 },
                 gridLines: {
                     display: false
+                },
+                ticks: {
+                    fontColor: 'rgb(181,182,187)'
                 }
-                // ticks: {
-                //     source: 'data'
-                // },
-                // bounds: 'data' // data is fully visible, labels outside removed
             }],
             yAxes: [{
                 gridLines: {
                     display: true,
                     color: 'rgba(181,182,187,0.2)'
+                },
+                ticks: {
+                    fontColor: 'rgb(181,182,187)'
                 }
             }]
         }
@@ -64,6 +69,10 @@ export class MixedChartComponent implements OnInit {
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(42,45,59,0.5)'
+        },
+        {
+            // line: white
+            borderColor: 'rgba(105,108,117,1)',
         }
     ];
 
@@ -128,6 +137,16 @@ export class MixedChartComponent implements OnInit {
             { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
             { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
             { x: new Date('2018-09-11T24:00:00-0400'), y: 0 },
+        ]
+    }, {
+        label: 'Now',
+        type: 'line',
+        fill: false,
+        lineTension: 0,
+        borderDash: [10, 5],
+        data: [
+            { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T13:00:00-0400'), y: 100 }
         ]
     }];
 
