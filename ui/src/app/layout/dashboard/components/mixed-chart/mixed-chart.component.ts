@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 
+import { WorkloadDataService } from '../../../../workload-data.service';
+import {Workload} from '../../../../model/workload';
+import {Observable} from 'rxjs/index';
+
 @Component({
     selector: 'app-mixed-chart',
     templateUrl: './mixed-chart.component.html',
     styleUrls: ['./mixed-chart.component.scss']
 })
 export class MixedChartComponent implements OnInit {
+
+    private workloadObservable: Observable<Workload[]> ;
+
     // bar chart
     public mixedChartOptions: any = {
         scaleShowVerticalLines: false,
@@ -76,79 +83,10 @@ export class MixedChartComponent implements OnInit {
         }
     ];
 
-    public mixedChartData: any[] = [{
-        label: 'Bar',
-        type: 'bar',
-        // lineTension: 0,
-        data: [
-            { x: new Date('2018-09-11T01:00:00-0400'), y: 65 },
-            { x: new Date('2018-09-11T02:00:00-0400'), y: 59 },
-            { x: new Date('2018-09-11T03:00:00-0400'), y: 80 },
-            { x: new Date('2018-09-11T04:00:00-0400'), y: 81 },
-            { x: new Date('2018-09-11T05:00:00-0400'), y: 56 },
-            { x: new Date('2018-09-11T06:00:00-0400'), y: 55 },
-            { x: new Date('2018-09-11T07:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T08:00:00-0400'), y: 15 },
-            { x: new Date('2018-09-11T09:00:00-0400'), y: 80 },
-            { x: new Date('2018-09-11T10:00:00-0400'), y: 90 },
-            { x: new Date('2018-09-11T11:00:00-0400'), y: 34 },
-            { x: new Date('2018-09-11T12:00:00-0400'), y: 2 },
-            { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T14:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T15:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T16:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T17:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T18:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T19:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 },
+    private barChartData: any[] = [];
+    private lineChartData: any[] = [];
 
-        ]
-    }, {
-        label: 'Line',
-        type: 'line',
-        fill: false,
-        lineTension: 0,
-        data: [
-            { x: new Date('2018-09-11T01:00:00-0400'), y: 28 },
-            { x: new Date('2018-09-11T02:00:00-0400'), y: 48 },
-            { x: new Date('2018-09-11T03:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T04:00:00-0400'), y: 19 },
-            { x: new Date('2018-09-11T05:00:00-0400'), y: 86 },
-            { x: new Date('2018-09-11T06:00:00-0400'), y: 27 },
-            { x: new Date('2018-09-11T07:00:00-0400'), y: 90 },
-            { x: new Date('2018-09-11T08:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T09:00:00-0400'), y: 25 },
-            { x: new Date('2018-09-11T10:00:00-0400'), y: 82 },
-            { x: new Date('2018-09-11T11:00:00-0400'), y: 85 },
-            { x: new Date('2018-09-11T12:00:00-0400'), y: 59 },
-            { x: new Date('2018-09-11T13:00:00-0400'), y: 65 },
-            { x: new Date('2018-09-11T14:00:00-0400'), y: 49 },
-            { x: new Date('2018-09-11T15:00:00-0400'), y: 35 },
-            { x: new Date('2018-09-11T16:00:00-0400'), y: 20 },
-            { x: new Date('2018-09-11T17:00:00-0400'), y: 10 },
-            { x: new Date('2018-09-11T18:00:00-0400'), y: 8 },
-            { x: new Date('2018-09-11T19:00:00-0400'), y: 2 },
-            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 },
-        ]
-    }, {
-        label: 'Now',
-        type: 'line',
-        fill: false,
-        lineTension: 0,
-        borderDash: [10, 5],
-        data: [
-            { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T13:00:00-0400'), y: 100 }
-        ]
-    }];
+    public mixedChartData: any[] = [];
 
     // events
     public chartClicked(e: any): void {
@@ -181,7 +119,147 @@ export class MixedChartComponent implements OnInit {
          */
     }
 
-    constructor() {}
+    constructor(private workloadService: WorkloadDataService ) {
+        this.workloadService.getInitialWorkloadData().subscribe((res: any[]) => {
+            res.forEach(item => {
+                this.barChartData.push(new Workload(item.x, item.y));
+                this.barChartData.push(new Object(item.x, item.y));
+            });
+        });
+/*        this.barChartData = [
+            { x: new Date('2018-09-11T01:00:00-0400'), y: 65 },
+            { x: new Date('2018-09-11T02:00:00-0400'), y: 59 },
+            { x: new Date('2018-09-11T03:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T04:00:00-0400'), y: 81 },
+            { x: new Date('2018-09-11T05:00:00-0400'), y: 56 },
+            { x: new Date('2018-09-11T06:00:00-0400'), y: 55 },
+            { x: new Date('2018-09-11T07:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T08:00:00-0400'), y: 15 },
+            { x: new Date('2018-09-11T09:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T10:00:00-0400'), y: 90 },
+            { x: new Date('2018-09-11T11:00:00-0400'), y: 34 },
+            { x: new Date('2018-09-11T12:00:00-0400'), y: 2 },
+            { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T14:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T15:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T16:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T17:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T18:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T19:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 }
+        ];*/
 
-    ngOnInit() {}
+    }
+
+    ngOnInit() {
+        console.log(this.barChartData);
+        console.log(this.getBarChartData());
+        this.addBarChart(this.barChartData);
+        this.addLineChart(this.getLineChartData());
+        this.addVerticalLine();
+        // this.workloadService.getInitialWorkloadData().subscribe(result => {
+        //     console.log('On init result: ', result);
+            // result.map(())
+            // let workloads = [];
+            // console.log();
+            // result.forEach((res) => {
+            //     this.barChartData.push({ x: new Date(res.x), y: res.y });
+            // });
+            // console.log(this.barChartData);
+        // });
+    }
+
+    addBarChart(chartData: any[]) {
+        this.mixedChartData.push({
+            label: 'Bar',
+            type: 'bar',
+            data: chartData
+        });
+    }
+
+    getBarChartData(): any[] {
+        return [
+            { x: new Date('2018-09-11T01:00:00-0400'), y: 65 },
+            { x: new Date('2018-09-11T02:00:00-0400'), y: 59 },
+            { x: new Date('2018-09-11T03:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T04:00:00-0400'), y: 81 },
+            { x: new Date('2018-09-11T05:00:00-0400'), y: 56 },
+            { x: new Date('2018-09-11T06:00:00-0400'), y: 55 },
+            { x: new Date('2018-09-11T07:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T08:00:00-0400'), y: 15 },
+            { x: new Date('2018-09-11T09:00:00-0400'), y: 80 },
+            { x: new Date('2018-09-11T10:00:00-0400'), y: 90 },
+            { x: new Date('2018-09-11T11:00:00-0400'), y: 34 },
+            { x: new Date('2018-09-11T12:00:00-0400'), y: 2 },
+            { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T14:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T15:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T16:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T17:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T18:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T19:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 }
+        ];
+    }
+
+    addLineChart(chartData: any[]) {
+        this.mixedChartData.push({
+            label: 'Line',
+            type: 'line',
+            fill: false,
+            lineTension: 0,
+            data: chartData
+        });
+    }
+
+    getLineChartData(): any[] {
+        return [
+            { x: new Date('2018-09-11T01:00:00-0400'), y: 28 },
+            { x: new Date('2018-09-11T02:00:00-0400'), y: 48 },
+            { x: new Date('2018-09-11T03:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T04:00:00-0400'), y: 19 },
+            { x: new Date('2018-09-11T05:00:00-0400'), y: 86 },
+            { x: new Date('2018-09-11T06:00:00-0400'), y: 27 },
+            { x: new Date('2018-09-11T07:00:00-0400'), y: 90 },
+            { x: new Date('2018-09-11T08:00:00-0400'), y: 40 },
+            { x: new Date('2018-09-11T09:00:00-0400'), y: 25 },
+            { x: new Date('2018-09-11T10:00:00-0400'), y: 82 },
+            { x: new Date('2018-09-11T11:00:00-0400'), y: 85 },
+            { x: new Date('2018-09-11T12:00:00-0400'), y: 59 },
+            { x: new Date('2018-09-11T13:00:00-0400'), y: 65 },
+            { x: new Date('2018-09-11T14:00:00-0400'), y: 49 },
+            { x: new Date('2018-09-11T15:00:00-0400'), y: 35 },
+            { x: new Date('2018-09-11T16:00:00-0400'), y: 20 },
+            { x: new Date('2018-09-11T17:00:00-0400'), y: 10 },
+            { x: new Date('2018-09-11T18:00:00-0400'), y: 8 },
+            { x: new Date('2018-09-11T19:00:00-0400'), y: 2 },
+            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
+            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 }
+        ];
+    }
+
+    addVerticalLine() {
+        this.mixedChartData.push({
+            label: 'Now',
+            type: 'line',
+            fill: false,
+            lineTension: 0,
+            borderDash: [10, 5],
+            data: [
+                { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
+                { x: new Date('2018-09-11T13:00:00-0400'), y: 100 }
+            ]
+        });
+    }
 }
