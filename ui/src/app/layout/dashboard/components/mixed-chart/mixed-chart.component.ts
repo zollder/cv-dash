@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
 import { WorkloadDataService } from '../../../../workload-data.service';
 import {Workload} from '../../../../model/workload';
@@ -7,7 +7,8 @@ import {Observable} from 'rxjs/index';
 @Component({
     selector: 'app-mixed-chart',
     templateUrl: './mixed-chart.component.html',
-    styleUrls: ['./mixed-chart.component.scss']
+    styleUrls: ['./mixed-chart.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MixedChartComponent implements OnInit {
 

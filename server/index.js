@@ -20,7 +20,7 @@ app.get('/api/workload', (req, res) => {
 setInterval(function() {
     utils.updateWorkload();
     io.sockets.emit('workload', utils.workload[utils.workload.length - 1]);
-}, 30000);
+}, 60000);
 
 io.on('connection', function(socket) {
     console.log('user connected');
