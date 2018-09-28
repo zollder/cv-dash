@@ -3,6 +3,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import { WorkloadDataService } from '../../../../workload-data.service';
 import {Workload} from '../../../../model/workload';
 import {Observable} from 'rxjs/index';
+import { Chart } from 'chart.js';
 
 @Component({
     selector: 'app-mixed-chart',
@@ -11,6 +12,8 @@ import {Observable} from 'rxjs/index';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MixedChartComponent implements OnInit {
+
+    public charts: Chart = {};
 
     // bar chart
     public mixedChartOptions: any = {
@@ -116,24 +119,66 @@ export class MixedChartComponent implements OnInit {
             });
         });*/
         // this.fetchBarChartData();
-        this.initBarChartData();
-        this.addBarChart(this.barChartData);
-        this.addLineChart(this.getLineChartData());
-        this.addVerticalLine();
+        // this.initBarChartData();
+        // this.addBarChart(this.barChartData);
+        // this.addLineChart(this.getLineChartData());
+        // this.addVerticalLine();
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.workloadService.getInitialWorkloadData().subscribe( data => {
+            console.log(data);
 
-    addBarChart(chartData: any[]) {
-        console.log('just before bar chart', this.barChartData);
-        this.mixedChartData.push({
-            label: 'Bar',
-            type: 'bar',
-            data: chartData
+            // const workloadDates = data.map((item) => new Date(item.x));
+            // const workloadValues = data.map((item) => item.y);
+            // this.addBarChart(workloadDates, workloadValues);
+
+            // const historicalDates = this.getLineChartData().map((item) => new Date(item.x));
+            // const historicalValues = this.getLineChartData().map((item) => item.y);
+            // this.addLineChart(historicalDates, historicalValues);
+
+            const workloadDates = data.map((item) => {
+                return {x: new Date(item.x), y: item.y };
+            });
+
+            let incomingWorkloadChart = {
+                type: 'bar',
+                data: {
+                    // labels: chartLabels,
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Bar',
+                            data: workloadDates,
+                            backgroundColor: 'rgba(77,83,96,0.7)',
+                            borderColor: 'rgba(77,83,96,1)',
+                            borderWidth: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Line',
+                            data: this.getLineChartData(),
+                            borderColor: 'rgba(105,108,117,1)',
+                            pointBackgroundColor: 'rgba(42,45,59,0.2)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(42,45,59,0.5)'
+                        }
+                    ]
+                },
+                options: this.mixedChartOptions
+            };
+            this.charts.push(new Chart('canvas', incomingWorkloadChart));
         });
     }
 
-    fetchBarChartData() {
+
+
+    buildLineChart(chartLabels: any[], chartData: any[]) {
+
+    }
+
+/*    fetchBarChartData() {
         this.workloadService.getInitialWorkloadData()
             .toPromise()
             .then((data) => {
@@ -148,7 +193,7 @@ export class MixedChartComponent implements OnInit {
                 this.addBarChart(this.barChartData);
 
             });
-    }
+    }*/
 
     initBarChartData() {
         this.workloadService.getInitialWorkloadData().subscribe(
@@ -191,14 +236,51 @@ export class MixedChartComponent implements OnInit {
         ];
     }
 
-    addLineChart(chartData: any[]) {
-        this.mixedChartData.push({
-            label: 'Line',
-            type: 'line',
-            fill: false,
-            lineTension: 0,
-            data: chartData
-        });
+    addBarChart(chartLabels: any[], chartData: any[]) {
+        console.log('Initializing bar chart: ', chartData);
+
+        this.charts.push(
+            new Chart('canvas', {
+                type: 'bar',
+                label: 'Bar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [
+                        {
+                            data: chartData,
+                            backgroundColor: 'rgba(77,83,96,0.7)',
+                            borderColor: 'rgba(77,83,96,1)'
+                        }
+                    ]
+                },
+                options: this.mixedChartOptions
+            })
+        );
+    }
+
+    addLineChart(chartLabels: any[], chartData: any[]) {
+        this.charts.push(
+            new Chart('canvas', {
+                type: 'line',
+                label: 'Line',
+                fill: false,
+                lineTension: 0,
+                data: {
+                    labels: chartLabels,
+                    datasets: [
+                        {
+                            data: chartData,
+                            borderColor: 'rgba(105,108,117,1)',
+                            pointBackgroundColor: 'rgba(42,45,59,0.2)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(42,45,59,0.5)'
+                        }
+                    ]
+                },
+                options: this.mixedChartOptions
+            })
+        );
     }
 
     getLineChartData(): any[] {

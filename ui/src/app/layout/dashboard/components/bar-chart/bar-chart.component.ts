@@ -128,7 +128,7 @@ export class BarChartComponent implements OnInit {
             let workloadDates = data.map((item) => new Date(item.x));
 
             this.chart.push(
-                new Chart('canvas', {
+                new Chart('canvas1', {
                     type: 'bar',
                     data: {
                         labels: workloadDates,
