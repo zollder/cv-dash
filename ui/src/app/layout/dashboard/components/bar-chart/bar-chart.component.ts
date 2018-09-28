@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {WorkloadDataService} from "../../../../workload-data.service";
+import {WorkloadDataService} from '../../../../workload-data.service';
+import { Chart } from 'chart.js';
 
 @Component({
     selector: 'app-bar-chart',
@@ -7,10 +8,44 @@ import {WorkloadDataService} from "../../../../workload-data.service";
     styleUrls: ['./bar-chart.component.scss']
 })
 export class BarChartComponent implements OnInit {
+
+    chart = [];
+
     // bar chart
     public barChartOptions: any = {
         scaleShowVerticalLines: false,
-        responsive: true
+        responsive: true,
+        legend: {
+            position: 'bottom'
+        },
+        scales: {
+            barBeginAtOrigin: true,
+            scaleBeginAtZero: true,
+            xAxes: [{
+                type: 'time',
+                // distribution: 'linear', // explore
+                time: {
+                    unit: 'hour',
+                    // unitStepSize: 1,
+                    displayFormats: { hour: 'HH:mm'}
+                },
+                gridLines: {
+                    display: false
+                },
+                ticks: {
+                    fontColor: 'rgb(181,182,187)'
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    display: true,
+                    color: 'rgba(181,182,187,0.2)'
+                },
+                ticks: {
+                    fontColor: 'rgb(181,182,187)'
+                }
+            }]
+        }
     };
 
     public barChartType = 'bar';
@@ -49,17 +84,8 @@ export class BarChartComponent implements OnInit {
     ];
 
     // ----------------- new fields
-    public chartLabels: Date[] = [];
-    public chartData: number[] = [];
-    @Input() workloadData = {
-        '2018-09-11T01:00:00-0400': 65,
-        '2018-09-11T02:00:00-0400': 59,
-        '2018-09-11T03:00:00-0400': 80,
-        '2018-09-11T04:00:00-0400': 81,
-        '2018-09-11T05:00:00-0400': 56,
-        '2018-09-11T06:00:00-0400': 55,
-        '2018-09-11T07:00:00-0400': 40
-    };
+    public chartLabels = [];
+    public chartData: any[] = [];
 
     // events
     public chartClicked(e: any): void {
@@ -94,14 +120,29 @@ export class BarChartComponent implements OnInit {
 
     constructor(private workloadService: WorkloadDataService) {}
 
-    public getData() {
-        this.chartLabels = Object.keys(this.workloadData).map(key => new Date(key));
-        this.chartData = Object.values(this.workloadData);
-        console.log('Labels:', this.chartLabels);
-        console.log('Data:', this.chartData);
-    }
-
     ngOnInit() {
-        this.getData();
+        this.workloadService.getInitialWorkloadData().subscribe( data => {
+            console.log(data);
+
+            let workloadValues = data.map((item) => item.y);
+            let workloadDates = data.map((item) => new Date(item.x));
+
+            this.chart.push(
+                new Chart('canvas', {
+                    type: 'bar',
+                    data: {
+                        labels: workloadDates,
+                        datasets: [
+                            {
+                                data: workloadValues,
+                                backgroundColor: 'rgba(77,83,96,0.7)',
+                                borderColor: 'rgba(77,83,96,1)'
+                            }
+                        ]
+                    },
+                    options: this.barChartOptions
+                })
+            );
+        });
     }
 }

@@ -2,8 +2,9 @@
 <div class="card-header">
     Bar Chart
 </div>
-<div class="card-body">
-    <canvas baseChart
+<div class="card-body" *ngIf="chart">
+    <canvas id="canvas">{{ chart }}</canvas>
+<!--    <canvas baseChart
             [datasets]="chartData"
             [labels]="chartLabels"
             [options]="barChartOptions"
@@ -12,7 +13,7 @@
             [colors]="barChartColors"
             (chartHover)="chartHovered($event)"
             (chartClick)="chartClicked($event)">
-    </canvas>
+    </canvas>-->
 </div>
 <div class="card-footer">
     <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
