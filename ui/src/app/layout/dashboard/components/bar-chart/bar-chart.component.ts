@@ -124,8 +124,8 @@ export class BarChartComponent implements OnInit {
         this.workloadService.getInitialWorkloadData().subscribe( data => {
             console.log(data);
 
-            let workloadValues = data.map((item) => item.y);
-            let workloadDates = data.map((item) => new Date(item.x));
+            let workloadValues = data.today.map((item) => item.y);
+            let workloadDates = data.today.map((item) => new Date(item.x));
 
             this.chart.push(
                 new Chart('canvas1', {

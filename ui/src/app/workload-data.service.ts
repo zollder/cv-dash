@@ -11,8 +11,12 @@ export class WorkloadDataService {
 
     constructor(private httpClient: HttpClient) {}
 
-    getInitialWorkloadData(): Observable<any[]> {
+    getInitialWorkloadData(): Observable<any> {
         return this.httpClient
-            .get<any[]>(`${this.baseUrl}/api/workload`);
+            .get<any>(`${this.baseUrl}/api/workload`);
+    }
+
+    getHistoricalData(): Observable<any[]> {
+        return null;
     }
 }

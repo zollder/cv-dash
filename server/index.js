@@ -19,7 +19,7 @@ app.get('/api/workload', (req, res) => {
 
 setInterval(function() {
     utils.updateWorkload();
-    io.sockets.emit('workload', utils.workload[utils.workload.length - 1]);
+    io.sockets.emit('workload', { today: utils.workload.today[0], historical: utils.workload.historical[0] });
 }, 60000);
 
 io.on('connection', function(socket) {

@@ -4,6 +4,7 @@ import { WorkloadDataService } from '../../../../workload-data.service';
 import {Workload} from '../../../../model/workload';
 import {Observable} from 'rxjs/index';
 import { Chart } from 'chart.js';
+import {map} from 'rxjs/internal/operators';
 
 @Component({
     selector: 'app-mixed-chart',
@@ -13,7 +14,7 @@ import { Chart } from 'chart.js';
 })
 export class MixedChartComponent implements OnInit {
 
-    public charts: Chart = {};
+    public charts: Chart[] = [];
 
     // bar chart
     public mixedChartOptions: any = {
@@ -83,11 +84,11 @@ export class MixedChartComponent implements OnInit {
 
     // events
     public chartClicked(e: any): void {
-        // console.log(e);
+        console.log(e);
     }
 
     public chartHovered(e: any): void {
-        // console.log(e);
+        console.log(e);
     }
 
     public randomize(): void {
@@ -112,32 +113,17 @@ export class MixedChartComponent implements OnInit {
          */
     }
 
-    constructor(private workloadService: WorkloadDataService ) {
-/*        this.workloadService.getInitialWorkloadData().subscribe((res: any[]) => {
-            res.forEach(item => {
-                this.barChartData.push(new Workload(item.x, item.y));
-            });
-        });*/
-        // this.fetchBarChartData();
-        // this.initBarChartData();
-        // this.addBarChart(this.barChartData);
-        // this.addLineChart(this.getLineChartData());
-        // this.addVerticalLine();
-    }
+    constructor(private workloadService: WorkloadDataService ) {}
 
     ngOnInit() {
         this.workloadService.getInitialWorkloadData().subscribe( data => {
-            console.log(data);
+            console.log('Source data: ', data);
 
-            // const workloadDates = data.map((item) => new Date(item.x));
-            // const workloadValues = data.map((item) => item.y);
-            // this.addBarChart(workloadDates, workloadValues);
+            const todayData = data.today.map((item) => {
+                return {x: new Date(item.x), y: item.y };
+            });
 
-            // const historicalDates = this.getLineChartData().map((item) => new Date(item.x));
-            // const historicalValues = this.getLineChartData().map((item) => item.y);
-            // this.addLineChart(historicalDates, historicalValues);
-
-            const workloadDates = data.map((item) => {
+            const historicalData = data.historical.map((item) => {
                 return {x: new Date(item.x), y: item.y };
             });
 
@@ -147,17 +133,20 @@ export class MixedChartComponent implements OnInit {
                     // labels: chartLabels,
                     datasets: [
                         {
+                            // bar: light blue
                             type: 'bar',
-                            label: 'Bar',
-                            data: workloadDates,
-                            backgroundColor: 'rgba(77,83,96,0.7)',
-                            borderColor: 'rgba(77,83,96,1)',
-                            borderWidth: 1
+                            label: 'Today',
+                            data: todayData,
+                            backgroundColor: 'rgba(26,177,191,0.7)',
+                            borderColor: 'rgba(26,177,191,1)'
+                            // borderWidth: 1
                         },
                         {
                             type: 'line',
-                            label: 'Line',
-                            data: this.getLineChartData(),
+                            label: 'Historical',
+                            data: historicalData,
+                            lineTension: 0,
+                            fill: false,
                             borderColor: 'rgba(105,108,117,1)',
                             pointBackgroundColor: 'rgba(42,45,59,0.2)',
                             pointBorderColor: '#fff',
@@ -172,29 +161,6 @@ export class MixedChartComponent implements OnInit {
         });
     }
 
-
-
-    buildLineChart(chartLabels: any[], chartData: any[]) {
-
-    }
-
-/*    fetchBarChartData() {
-        this.workloadService.getInitialWorkloadData()
-            .toPromise()
-            .then((data) => {
-                console.log('promise1:', data);
-                data.forEach(item => {
-                    console.log(item.x, ', ', item.y);
-                    this.barChartData.push({ x: new Date(item.x), y: 65 });
-                });
-            })
-            .then((data) => {
-                console.log('promise 2', this.barChartData);
-                this.addBarChart(this.barChartData);
-
-            });
-    }*/
-
     initBarChartData() {
         this.workloadService.getInitialWorkloadData().subscribe(
             (data: any[]) => {
@@ -205,35 +171,6 @@ export class MixedChartComponent implements OnInit {
             },
             error => { console.log('Error: ', error); }
         );
-    }
-
-    getBarChartData(): any[] {
-        return [
-            { x: new Date('2018-09-11T01:00:00-0400'), y: 65 },
-            { x: new Date('2018-09-11T02:00:00-0400'), y: 59 },
-            { x: new Date('2018-09-11T03:00:00-0400'), y: 80 },
-            { x: new Date('2018-09-11T04:00:00-0400'), y: 81 },
-            { x: new Date('2018-09-11T05:00:00-0400'), y: 56 },
-            { x: new Date('2018-09-11T06:00:00-0400'), y: 55 },
-            { x: new Date('2018-09-11T07:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T08:00:00-0400'), y: 15 },
-            { x: new Date('2018-09-11T09:00:00-0400'), y: 80 },
-            { x: new Date('2018-09-11T10:00:00-0400'), y: 90 },
-            { x: new Date('2018-09-11T11:00:00-0400'), y: 34 },
-            { x: new Date('2018-09-11T12:00:00-0400'), y: 2 },
-            { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T14:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T15:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T16:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T17:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T18:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T19:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 }
-        ];
     }
 
     addBarChart(chartLabels: any[], chartData: any[]) {
@@ -281,35 +218,6 @@ export class MixedChartComponent implements OnInit {
                 options: this.mixedChartOptions
             })
         );
-    }
-
-    getLineChartData(): any[] {
-        return [
-            { x: new Date('2018-09-11T01:00:00-0400'), y: 28 },
-            { x: new Date('2018-09-11T02:00:00-0400'), y: 48 },
-            { x: new Date('2018-09-11T03:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T04:00:00-0400'), y: 19 },
-            { x: new Date('2018-09-11T05:00:00-0400'), y: 86 },
-            { x: new Date('2018-09-11T06:00:00-0400'), y: 27 },
-            { x: new Date('2018-09-11T07:00:00-0400'), y: 90 },
-            { x: new Date('2018-09-11T08:00:00-0400'), y: 40 },
-            { x: new Date('2018-09-11T09:00:00-0400'), y: 25 },
-            { x: new Date('2018-09-11T10:00:00-0400'), y: 82 },
-            { x: new Date('2018-09-11T11:00:00-0400'), y: 85 },
-            { x: new Date('2018-09-11T12:00:00-0400'), y: 59 },
-            { x: new Date('2018-09-11T13:00:00-0400'), y: 65 },
-            { x: new Date('2018-09-11T14:00:00-0400'), y: 49 },
-            { x: new Date('2018-09-11T15:00:00-0400'), y: 35 },
-            { x: new Date('2018-09-11T16:00:00-0400'), y: 20 },
-            { x: new Date('2018-09-11T17:00:00-0400'), y: 10 },
-            { x: new Date('2018-09-11T18:00:00-0400'), y: 8 },
-            { x: new Date('2018-09-11T19:00:00-0400'), y: 2 },
-            { x: new Date('2018-09-11T20:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T21:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T22:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T23:00:00-0400'), y: 0 },
-            { x: new Date('2018-09-11T24:00:00-0400'), y: 0 }
-        ];
     }
 
     addVerticalLine() {
