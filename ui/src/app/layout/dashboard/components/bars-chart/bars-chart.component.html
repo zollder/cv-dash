@@ -1,0 +1,23 @@
+
+<div class="card-header">
+    Bar Chart
+</div>
+<div class="card-body">
+    <canvas baseChart
+            [chartType]="chartType"
+            [datasets]="chartData"
+            [options]="chartOptions"
+            [legend]="chartLegend"
+            [colors]="chartColors">
+    </canvas>
+
+<!--    <canvas *ngIf="chartData && chartData[0].data && chartData[0].data.length > 0"
+            baseChart
+            [chartType]="chartType"
+            [datasets]="chartData"
+            [options]="chartOptions"
+            [legend]="chartLegend"
+            [colors]="chartColors">
+    </canvas>-->
+
+</div>

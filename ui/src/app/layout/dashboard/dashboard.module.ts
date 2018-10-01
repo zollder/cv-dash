@@ -18,6 +18,7 @@ import {
 import { StatModule } from '../../shared';
 import { ChartsModule as Ng2Charts } from 'ng2-charts';
 import { NgxChartsModule} from '@swimlane/ngx-charts';
+import {BarsChartComponent} from './components/bars-chart/bars-chart.component';
 
 @NgModule({
     imports: [
@@ -35,6 +36,7 @@ import { NgxChartsModule} from '@swimlane/ngx-charts';
         NotificationComponent,
         ChatComponent,
         BarChartComponent,
+        BarsChartComponent,
         DoughnutChartComponent,
         LineChartComponent,
         PieChartComponent,

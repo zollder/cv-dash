@@ -60,17 +60,21 @@ function updateWorkload() {
     const ts = moment(workload.today[0].x).add(60, 'm');
 
     // generate value b/w 0 and 5
-    let randomToday = getRandomInt(0, 6);
+    let randomToday = getRandomInt(0, 20);
     let valueToday = workload.today[0].y;
     valueToday += randomToday % 2 ? randomToday : -randomToday;
+    if (valueToday < 0)
+        valueToday = -valueToday;
 
     // add new object to the end, and remove the 1st one
     workload.today.unshift({ x: ts, y: valueToday});
     workload.today.pop();
 
-    let randomHist = getRandomInt(0, 6);
+    let randomHist = getRandomInt(0, 20);
     let valueHist = workload.historical[0].y;
     valueHist += randomHist % 2 ? randomHist : -randomHist;
+    if (valueHist < 0)
+        valueHist = -valueHist;
 
     // add new object to the end, and remove the 1st one
     workload.historical.unshift({ x: ts, y: valueHist});
