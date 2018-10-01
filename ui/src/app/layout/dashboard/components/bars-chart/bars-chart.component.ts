@@ -1,15 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {WorkloadDataService} from '../../../../workload-data.service';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { WorkloadDataService } from '../../../../workload-data.service';
 import { Chart } from 'chart.js';
-import {Observable} from 'rxjs/index';
-import {WorkloadData} from '../../../../model/WorkloadData';
+import { Observable } from 'rxjs';
+import { interval } from 'rxjs/index';
+import {startWith, switchMap} from 'rxjs/internal/operators';
 
 @Component({
     selector: 'app-bars-chart',
     templateUrl: './bars-chart.component.html',
     styleUrls: ['./bars-chart.component.scss']
 })
-export class BarsChartComponent implements OnInit {
+export class BarsChartComponent implements OnInit, OnDestroy {
 
     // bar chart
     public chartOptions: any = {
@@ -53,15 +54,29 @@ export class BarsChartComponent implements OnInit {
             // dark grey
             backgroundColor: 'rgba(77,83,96,0.7)',
             borderColor: 'rgba(77,83,96,1)'
+        },
+        {
+            // blue
+            backgroundColor: 'rgba(26,177,191,0.7)',
+            borderColor: 'rgba(26,177,191,1)'
         }
     ];
 
-    public chartData: any[] = [{
-        label: 'Bar',
-        data: []
-    }];
+    public chartData: any[] = [
+        {
+            label: 'Historical',
+            type: 'bar',
+            data: []
+        },
+        {
+            label: 'Today',
+            type: 'bar',
+            data: []
+        }
+    ];
 
-    workloadData: Observable<any[]>;
+    public workloadObservable: Observable<any>;
+    public subscriber;
 
     // events
     public chartClicked(e: any): void {
@@ -73,26 +88,44 @@ export class BarsChartComponent implements OnInit {
     }
 
     constructor(private workloadService: WorkloadDataService) {
-        this.workloadData = this.workloadService.getInitialWorkloadData();
+        this.workloadObservable = this.workloadService.getInitialWorkloadData();
     }
 
     ngOnInit() {
-        this.workloadData.subscribe( data => {
-            console.log('Incoming data', data);
-            console.log('Incoming historical data', data[0]);
+        this.subscriber = interval(10000).pipe(
+            startWith(0),
+            switchMap(() => this.workloadObservable))
+            .subscribe(data => {
+                console.log('Incoming data', data);
+                console.log('Incoming historical data', data[0]);
 
-            // let workloadValues = data.today.map((item) => item.y);
-            let historical = data.historical.map((item) => {
-                return {x: new Date(item.x), y: item.y};
+                // let workloadValues = data.today.map((item) => item.y);
+                let historical = data.historical.map((item) => {
+                    return {x: new Date(item.x), y: item.y};
+                });
+                let today = data.today.map((item) => {
+                    return {x: new Date(item.x), y: item.y};
+                });
+                console.log('Modified historical data', historical);
+                this.chartData = [
+                    {
+                        label: 'Historical',
+                        type: 'bar',
+                        data: historical
+                    },
+                    {
+                        label: 'Today',
+                        type: 'bar',
+                        data: today
+                    },
+                ];
             });
-            let today = data.today.map((item) => {
-                return {x: new Date(item.x), y: item.y};
-            });
-            console.log('Modified historical data', historical);
-            this.chartData = [{
-                label: 'Bar',
-                data: historical
-            }];
-        });
+        // this.workloadObservable.subscribe();
+    }
+
+    ngOnDestroy(): void {
+        if (this.subscriber) {
+            this.subscriber.unsubscribe();
+        }
     }
 }
