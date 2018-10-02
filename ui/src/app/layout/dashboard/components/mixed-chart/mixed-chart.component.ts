@@ -1,23 +1,19 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 
-import { WorkloadDataService } from '../../../../workload-data.service';
-import {Workload} from '../../../../model/workload';
-import {Observable} from 'rxjs/index';
-import { Chart } from 'chart.js';
-import {map} from 'rxjs/internal/operators';
+import {WorkloadDataService} from '../../../../workload-data.service';
+import {interval, Observable} from 'rxjs/index';
+import {Chart} from 'chart.js';
+import {startWith, switchMap} from 'rxjs/internal/operators';
 
 @Component({
     selector: 'app-mixed-chart',
     templateUrl: './mixed-chart.component.html',
-    styleUrls: ['./mixed-chart.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./mixed-chart.component.scss']
 })
-export class MixedChartComponent implements OnInit {
-
-    public charts: Chart[] = [];
+export class MixedChartComponent implements OnInit, OnDestroy {
 
     // bar chart
-    public mixedChartOptions: any = {
+    public chartOptions: any = {
         scaleShowVerticalLines: false,
         responsive: true,
         legend: {
@@ -56,7 +52,6 @@ export class MixedChartComponent implements OnInit {
     // default chart type has to be 'bar'
     public mixedChartType = 'bar';
     public mixedChartLegend = true;
-
     public mixedChartColors: Array<any> = [
         {
             // bar: light blue
@@ -70,17 +65,29 @@ export class MixedChartComponent implements OnInit {
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(42,45,59,0.5)'
-        },
-        {
+        }
+/*        {
             // line: white
             borderColor: 'rgba(105,108,117,1)',
-        }
+        }*/
     ];
 
-    private barChartData: any[] = [];
-    private lineChartData: any[] = [];
-
-    public mixedChartData: any[] = [];
+    public mixedChartData: any[] = [
+        {
+            label: 'Today',
+            type: 'bar',
+            data: []
+        },
+        {
+            label: 'Historical',
+            type: 'line',
+            fill: false,
+            lineTension: 0,
+            data: []
+        }
+    ];
+    public workloadObservable: Observable<any>;
+    public subscriber;
 
     // events
     public chartClicked(e: any): void {
@@ -91,31 +98,43 @@ export class MixedChartComponent implements OnInit {
         console.log(e);
     }
 
-    public randomize(): void {
-        // Only Change 3 values
-        const data = [
-            Math.round(Math.random() * 100),
-            59,
-            80,
-            Math.random() * 100,
-            56,
-            Math.random() * 100,
-            40
-        ];
-        const clone = JSON.parse(JSON.stringify(this.mixedChartData));
-        clone[0].data = data;
-        this.mixedChartData = clone;
-        /**
-         * (My guess), for Angular to recognize the change in the dataset
-         * it has to change the dataset variable directly,
-         * so one way around it, is to clone the data, change it and then
-         * assign it;
-         */
+    constructor(private workloadService: WorkloadDataService ) {
+        this.workloadObservable = this.workloadService.getInitialWorkloadData();
     }
 
-    constructor(private workloadService: WorkloadDataService ) {}
-
     ngOnInit() {
+        this.subscriber = interval(10000).pipe(
+            startWith(0),
+            switchMap(() => this.workloadObservable))
+            .subscribe(data => {
+                // console.log('Incoming data', data);
+                this.mixedChartData = [
+                    {
+                        label: 'Today',
+                        type: 'bar',
+                        data: data.today.map((item) => {
+                            return {x: new Date(item.x), y: item.y};
+                        })
+                    },
+                    {
+                        label: 'Historical',
+                        type: 'line',
+                        fill: false,
+                        lineTension: 0,
+                        data: data.historical.map((item) => {
+                            return {x: new Date(item.x), y: item.y};
+                        })
+                    }
+                ];
+            });
+    }
+
+    ngOnDestroy(): void {
+        if (this.subscriber) {
+            this.subscriber.unsubscribe();
+        }
+    }
+/*    ngOnInit() {
         this.workloadService.getInitialWorkloadData().subscribe( data => {
             console.log('Source data: ', data);
 
@@ -159,68 +178,9 @@ export class MixedChartComponent implements OnInit {
             };
             this.charts.push(new Chart('canvas', incomingWorkloadChart));
         });
-    }
+    }*/
 
-    initBarChartData() {
-        this.workloadService.getInitialWorkloadData().subscribe(
-            (data: any[]) => {
-                console.log('Data from observable: ', data);
-                data.forEach(item => {
-                    this.barChartData.push({ x: new Date(item.x), y: item.y });
-                });
-            },
-            error => { console.log('Error: ', error); }
-        );
-    }
-
-    addBarChart(chartLabels: any[], chartData: any[]) {
-        console.log('Initializing bar chart: ', chartData);
-
-        this.charts.push(
-            new Chart('canvas', {
-                type: 'bar',
-                label: 'Bar',
-                data: {
-                    labels: chartLabels,
-                    datasets: [
-                        {
-                            data: chartData,
-                            backgroundColor: 'rgba(77,83,96,0.7)',
-                            borderColor: 'rgba(77,83,96,1)'
-                        }
-                    ]
-                },
-                options: this.mixedChartOptions
-            })
-        );
-    }
-
-    addLineChart(chartLabels: any[], chartData: any[]) {
-        this.charts.push(
-            new Chart('canvas', {
-                type: 'line',
-                label: 'Line',
-                fill: false,
-                lineTension: 0,
-                data: {
-                    labels: chartLabels,
-                    datasets: [
-                        {
-                            data: chartData,
-                            borderColor: 'rgba(105,108,117,1)',
-                            pointBackgroundColor: 'rgba(42,45,59,0.2)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(42,45,59,0.5)'
-                        }
-                    ]
-                },
-                options: this.mixedChartOptions
-            })
-        );
-    }
-
-    addVerticalLine() {
+/*    addVerticalLine() {
         this.mixedChartData.push({
             label: 'Now',
             type: 'line',
@@ -232,5 +192,5 @@ export class MixedChartComponent implements OnInit {
                 { x: new Date('2018-09-11T13:00:00-0400'), y: 100 }
             ]
         });
-    }
+    }*/
 }

@@ -1,11 +1,14 @@
-<div class="card-body" *ngIf="charts">
+<!--<div class="card-body" *ngIf="charts">-->
+<div class="card-body">
     <h5 class="card-title">Incoming Workload</h5>
-    <!--<label>Incoming Workload</label>-->
     <hr/>
 
-    <canvas id="canvas">{{ charts }}</canvas>
-</div>
-
-<div class="card-footer">
-    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
+    <canvas baseChart
+            [chartType]="mixedChartType"
+            [datasets]="mixedChartData"
+            [options]="chartOptions"
+            [legend]="mixedChartLegend"
+            [colors]="mixedChartColors">
+    </canvas>
+    <!--<canvas id="canvas">{{ charts }}</canvas>-->
 </div>

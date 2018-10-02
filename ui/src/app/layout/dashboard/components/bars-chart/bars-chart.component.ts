@@ -51,26 +51,31 @@ export class BarsChartComponent implements OnInit, OnDestroy {
     public chartLegend = true;
     public chartColors: Array<any> = [
         {
-            // dark grey
-            backgroundColor: 'rgba(77,83,96,0.7)',
-            borderColor: 'rgba(77,83,96,1)'
-        },
-        {
-            // blue
+            // bar: light blue
             backgroundColor: 'rgba(26,177,191,0.7)',
             borderColor: 'rgba(26,177,191,1)'
+        },
+        {
+            // line: grey
+            borderColor: 'rgba(105,108,117,1)',
+            pointBackgroundColor: 'rgba(42,45,59,0.2)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(42,45,59,0.5)'
         }
     ];
 
     public chartData: any[] = [
         {
-            label: 'Historical',
+            label: 'Today',
             type: 'bar',
             data: []
         },
         {
-            label: 'Today',
-            type: 'bar',
+            label: 'Historical',
+            type: 'line',
+            fill: false,
+            lineTension: 0,
             data: []
         }
     ];
@@ -96,28 +101,31 @@ export class BarsChartComponent implements OnInit, OnDestroy {
             startWith(0),
             switchMap(() => this.workloadObservable))
             .subscribe(data => {
-                console.log('Incoming data', data);
-                console.log('Incoming historical data', data[0]);
+                // console.log('Incoming data', data);
+                // console.log('Incoming historical data', data[0]);
 
                 // let workloadValues = data.today.map((item) => item.y);
-                let historical = data.historical.map((item) => {
-                    return {x: new Date(item.x), y: item.y};
-                });
                 let today = data.today.map((item) => {
                     return {x: new Date(item.x), y: item.y};
                 });
-                console.log('Modified historical data', historical);
+                let historical = data.historical.map((item) => {
+                    return {x: new Date(item.x), y: item.y};
+                });
+
+                // console.log('Modified historical data', historical);
                 this.chartData = [
-                    {
-                        label: 'Historical',
-                        type: 'bar',
-                        data: historical
-                    },
                     {
                         label: 'Today',
                         type: 'bar',
                         data: today
                     },
+                    {
+                        label: 'Historical',
+                        type: 'line',
+                        fill: false,
+                        lineTension: 0,
+                        data: historical
+                    }
                 ];
             });
         // this.workloadObservable.subscribe();
