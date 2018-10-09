@@ -18,7 +18,7 @@ export class MixedChartComponent implements OnInit, OnDestroy {
     // bar chart
     public chartOptions: any = {
         scaleShowVerticalLines: false,
-        responsive: true,
+        responsive: false, // prevents bar width changes
         legend: {
             position: 'bottom'
         },
