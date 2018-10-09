@@ -43,7 +43,8 @@ export class MixedChartComponent implements OnInit, OnDestroy {
                 },
                 ticks: {
                     fontColor: 'rgb(181,182,187)'
-                }
+                },
+                offset: true    // solves the issue with half-width bar
             }],
             yAxes: [{
                 gridLines: {
