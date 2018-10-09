@@ -14,6 +14,11 @@ export class BarsChartComponent implements OnInit, OnDestroy {
 
     // bar chart
     public chartOptions: any = {
+        plugins: {
+            datalabels: {
+                display: false,
+            }
+        },
         scaleShowVerticalLines: false,
         responsive: true,
         legend: {

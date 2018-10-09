@@ -6,6 +6,7 @@ import {Chart} from 'chart.js';
 import {startWith, switchMap} from 'rxjs/internal/operators';
 
 import * as moment from 'moment';
+import 'chartjs-plugin-datalabels';
 
 @Component({
     selector: 'app-mixed-chart',
@@ -21,22 +22,9 @@ export class MixedChartComponent implements OnInit, OnDestroy {
         legend: {
             position: 'bottom'
         },
-        animation: {
-            duration: 0,
-            onComplete: function() {
-                const ctx = this.chart.ctx;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                const chart = this;
-                const datasets = this.config.data.datasets;
-                datasets.filter(ds => ds.type === 'bar')
-                    .forEach(function (dataset, i) {
-                        ctx.font = '11px Arial';
-                        ctx.fillStyle = 'White';
-                        chart.getDatasetMeta(i).data.forEach(function (p, j) {
-                            ctx.fillText(datasets[i].data[j].y, p._model.x, p._model.y - 5);
-                        });
-                });
+        plugins: {
+            datalabels: {
+                display: false,
             }
         },
         scales: {
@@ -97,6 +85,18 @@ export class MixedChartComponent implements OnInit, OnDestroy {
         {
             label: 'Today',
             type: 'bar',
+            datalabels: {
+                align: 'end',
+                anchor: 'end',
+                color: 'white',
+                display: true,
+                font: {
+                    weight: 'bold'
+                },
+                formatter: function(value) {
+                    return value.y;
+                }
+            },
             data: []
         },
         {
@@ -145,6 +145,18 @@ export class MixedChartComponent implements OnInit, OnDestroy {
                     {
                         label: 'Today',
                         type: 'bar',
+                        datalabels: {
+                            align: 'end',
+                            anchor: 'start',
+                            color: 'white',
+                            display: true,
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: function(value) {
+                                return value.y;
+                            }
+                        },
                         data: data.today.map((item) => {
                             return {x: new Date(item.x), y: item.y};
                         })

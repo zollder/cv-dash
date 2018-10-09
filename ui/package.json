@@ -30,6 +30,7 @@
     "@swimlane/ngx-charts": "^9.0.0",
     "chart.js": "^2.7.2",
     "chartjs": "^0.3.24",
+    "chartjs-plugin-datalabels": "^0.4.0",
     "core-js": "^2.5.5",
     "d3": "^5.7.0",
     "font-awesome": "^4.7.0",
