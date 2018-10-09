@@ -21,6 +21,24 @@ export class MixedChartComponent implements OnInit, OnDestroy {
         legend: {
             position: 'bottom'
         },
+        animation: {
+            duration: 0,
+            onComplete: function() {
+                const ctx = this.chart.ctx;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const chart = this;
+                const datasets = this.config.data.datasets;
+                datasets.filter(ds => ds.type === 'bar')
+                    .forEach(function (dataset, i) {
+                        ctx.font = '11px Arial';
+                        ctx.fillStyle = 'White';
+                        chart.getDatasetMeta(i).data.forEach(function (p, j) {
+                            ctx.fillText(datasets[i].data[j].y, p._model.x, p._model.y - 5);
+                        });
+                });
+            }
+        },
         scales: {
             barBeginAtOrigin: true,
             scaleBeginAtZero: true,
@@ -93,6 +111,7 @@ export class MixedChartComponent implements OnInit, OnDestroy {
             type: 'line',
             fill: false,
             lineTension: 0,
+            pointRadius: 0,
             data: []
         }
     ];
@@ -119,7 +138,7 @@ export class MixedChartComponent implements OnInit, OnDestroy {
             .subscribe(data => {
                 console.log('Incoming data', data);
                 const current = moment(data.today[0].x)
-                    .minutes(0)
+                    .minutes(-30)
                     .seconds(0)
                     .milliseconds(0);
                 this.mixedChartData = [
@@ -144,6 +163,7 @@ export class MixedChartComponent implements OnInit, OnDestroy {
                         type: 'line',
                         fill: false,
                         lineTension: 0,
+                        pointRadius: 0,
                         data: [
                             { x: current, y: 0 },
                             { x: current, y: 100 }
