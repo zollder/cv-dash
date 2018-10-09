@@ -5,6 +5,8 @@ import {interval, Observable} from 'rxjs/index';
 import {Chart} from 'chart.js';
 import {startWith, switchMap} from 'rxjs/internal/operators';
 
+import * as moment from 'moment';
+
 @Component({
     selector: 'app-mixed-chart',
     templateUrl: './mixed-chart.component.html',
@@ -65,11 +67,12 @@ export class MixedChartComponent implements OnInit, OnDestroy {
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(42,45,59,0.5)'
-        }
-/*        {
+        },
+        {
             // line: white
-            borderColor: 'rgba(105,108,117,1)',
-        }*/
+            borderColor: 'rgb(181,182,187)',
+            borderDash: [10, 5]
+        }
     ];
 
     public mixedChartData: any[] = [
@@ -80,6 +83,13 @@ export class MixedChartComponent implements OnInit, OnDestroy {
         },
         {
             label: 'Historical',
+            type: 'line',
+            fill: false,
+            lineTension: 0,
+            data: []
+        },
+        {
+            label: 'Current',
             type: 'line',
             fill: false,
             lineTension: 0,
@@ -103,11 +113,15 @@ export class MixedChartComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscriber = interval(10000).pipe(
+        this.subscriber = interval(5000).pipe(
             startWith(0),
             switchMap(() => this.workloadObservable))
             .subscribe(data => {
-                // console.log('Incoming data', data);
+                console.log('Incoming data', data);
+                const current = moment(data.today[0].x)
+                    .minutes(0)
+                    .seconds(0)
+                    .milliseconds(0);
                 this.mixedChartData = [
                     {
                         label: 'Today',
@@ -124,6 +138,16 @@ export class MixedChartComponent implements OnInit, OnDestroy {
                         data: data.historical.map((item) => {
                             return {x: new Date(item.x), y: item.y};
                         })
+                    },
+                    {
+                        label: 'Current',
+                        type: 'line',
+                        fill: false,
+                        lineTension: 0,
+                        data: [
+                            { x: current, y: 0 },
+                            { x: current, y: 100 }
+                        ]
                     }
                 ];
             });
@@ -134,63 +158,4 @@ export class MixedChartComponent implements OnInit, OnDestroy {
             this.subscriber.unsubscribe();
         }
     }
-/*    ngOnInit() {
-        this.workloadService.getInitialWorkloadData().subscribe( data => {
-            console.log('Source data: ', data);
-
-            const todayData = data.today.map((item) => {
-                return {x: new Date(item.x), y: item.y };
-            });
-
-            const historicalData = data.historical.map((item) => {
-                return {x: new Date(item.x), y: item.y };
-            });
-
-            let incomingWorkloadChart = {
-                type: 'bar',
-                data: {
-                    // labels: chartLabels,
-                    datasets: [
-                        {
-                            // bar: light blue
-                            type: 'bar',
-                            label: 'Today',
-                            data: todayData,
-                            backgroundColor: 'rgba(26,177,191,0.7)',
-                            borderColor: 'rgba(26,177,191,1)'
-                            // borderWidth: 1
-                        },
-                        {
-                            type: 'line',
-                            label: 'Historical',
-                            data: historicalData,
-                            lineTension: 0,
-                            fill: false,
-                            borderColor: 'rgba(105,108,117,1)',
-                            pointBackgroundColor: 'rgba(42,45,59,0.2)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(42,45,59,0.5)'
-                        }
-                    ]
-                },
-                options: this.mixedChartOptions
-            };
-            this.charts.push(new Chart('canvas', incomingWorkloadChart));
-        });
-    }*/
-
-/*    addVerticalLine() {
-        this.mixedChartData.push({
-            label: 'Now',
-            type: 'line',
-            fill: false,
-            lineTension: 0,
-            borderDash: [10, 5],
-            data: [
-                { x: new Date('2018-09-11T13:00:00-0400'), y: 0 },
-                { x: new Date('2018-09-11T13:00:00-0400'), y: 100 }
-            ]
-        });
-    }*/
 }

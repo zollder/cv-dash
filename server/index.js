@@ -19,8 +19,8 @@ app.get('/api/workload', (req, res) => {
 
 setInterval(function() {
     utils.updateWorkload();
-    io.sockets.emit('workload', { today: utils.workload.today[0], historical: utils.workload.historical[0] });
-}, 10000);
+    // io.sockets.emit('workload', { today: utils.workload.today[0], historical: utils.workload.historical[0] });
+}, 5000);
 
 io.on('connection', function(socket) {
     console.log('user connected');
